@@ -11,12 +11,12 @@
 </head>
 <body>
 
-<div th:replace="~{navbar :: navi(ProductList)}"/>
+<div th:replace="~{navbar :: navi(CartList)}"/>
 
 <div class="container">
-
-    <span th:if="${products.size() == 0}">Товаров нет</span>
-
+    <div th:if="${products.size() == 0}" class="position-absolute bottom-50 end-50">
+        <h1>Корзина пуста</h1>
+    </div>
     <div th:unless="${products.size() == 0}">
         <table class="table">
             <thead>
@@ -24,8 +24,6 @@
                 <th scope="col">#</th>
                 <th scope="col">Наименование</th>
                 <th scope="col">Цена</th>
-                <th scope="col">Добавить в корзину</th>
-                <th scope="col">Редактировать</th>
                 <th scope="col">Удалить</th>
             </tr>
             </thead>
@@ -37,13 +35,7 @@
                 <td th:text="${product.title}"></td>
                 <td th:text="${product.cost}"></td>
                 <td>
-                    <a type="button" th:href="@{/cart/add(id=${product.id})}" class="btn btn-warning">Добавить в корзину</a>
-                </td>
-                <td>
-                    <a type="button" th:href="@{/product(id=${product.id})}" class="btn btn-warning">Редактировать</a>
-                </td>
-                <td>
-                    <a type="button" th:href="@{/product/delete(id=${product.id})}" class="btn btn-danger">Удалить</a>
+                    <a type="button" th:href="@{/cart/deleteProduct(idProduct=${product.id})}" class="btn btn-danger">Удалить</a>
                 </td>
             </tr>
             </tbody>
