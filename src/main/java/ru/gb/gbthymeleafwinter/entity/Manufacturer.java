@@ -10,30 +10,26 @@ import ru.gb.gbthymeleafwinter.entity.enums.Status;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Set;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 @Entity
-@Table(name = "cart")
+@Table(name = "manufacturer")
 @EntityListeners(AuditingEntityListener.class)
-public class Cart extends AbstractEntity<Cart> {
+public class Manufacturer extends AbstractEntity<Manufacturer> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "cart_product",
-            joinColumns = {@JoinColumn(name = "cart_id")},
-            inverseJoinColumns = {@JoinColumn(name = "product_id")}
-    )
-    private Set<Product> products;
+//    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    private Set<Product> products;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
     private Status status;
 
     @Version
@@ -52,19 +48,12 @@ public class Cart extends AbstractEntity<Cart> {
     @Column(name = "LAST_MODIFIED_DATE")
     private LocalDate lastModifiedDate;
 
-    @Override
-    public String toString() {
-        return "Cart{" +
-                "id=" + id +
-                '}';
-    }
 
     @Override
-    public Cart createBuilder() {
-//        Set<Product> products = getProducts().stream().map(Product::createBuilder).collect(Collectors.toSet());
-        return Cart.builder()
+    public Manufacturer createBuilder() {
+        return Manufacturer.builder()
                 .id(id)
-//                .products(products)
+                .name(name)
                 .status(status)
                 .build();
     }

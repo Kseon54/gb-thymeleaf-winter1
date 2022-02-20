@@ -26,7 +26,7 @@ public class CartController {
 
     @GetMapping()
     public String getProductList(Model model) {
-        List<Cart> allActive = cartService.findAllActive();
+        List<Cart> allActive = (List<Cart>) cartService.findAllActive();
         if (allActive.size()!=0){
             Cart cart = allActive.get(0);
             model.addAttribute("products",cart.getProducts());
@@ -36,7 +36,7 @@ public class CartController {
 
     @GetMapping("add")
     public String addProduct(@RequestParam(name = "id", required = false) Long productId) {
-        List<Cart> allActive = cartService.findAllActive();
+        List<Cart> allActive = (List<Cart>) cartService.findAllActive();
         Cart cart;
         if (allActive.size()==0){
             cart = cartService.save(new Cart());
@@ -50,7 +50,7 @@ public class CartController {
 
     @GetMapping("/deleteProduct")
     public String deleteProductById(@RequestParam(name = "idProduct") Long idProduct) {
-        List<Cart> allActive = cartService.findAllActive();
+        List<Cart> allActive = (List<Cart>) cartService.findAllActive();
         if (allActive.size()!=0){
             Cart cart = allActive.get(0);
             List<Product> products = cart.getProducts().stream()
