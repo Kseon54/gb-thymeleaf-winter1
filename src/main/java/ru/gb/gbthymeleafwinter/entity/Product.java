@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import ru.gb.gbthymeleafwinter.dto.ProductDto;
 import ru.gb.gbthymeleafwinter.entity.enums.Status;
 
 import javax.persistence.*;
@@ -22,7 +23,7 @@ import java.util.Set;
 @Entity
 @Table(name = "product")
 @EntityListeners(AuditingEntityListener.class)
-public class Product extends AbstractEntity<Product>{
+public class Product extends AbstractEntity<Product> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,9 +34,6 @@ public class Product extends AbstractEntity<Product>{
 
     @ManyToMany(mappedBy = "products")
     private Set<Cart> carts;
-//    @ManyToOne
-//    @JoinColumn(name = "manufacturer_id")
-//    private Long manufacturerId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -76,5 +74,16 @@ public class Product extends AbstractEntity<Product>{
                 .date(date)
                 .status(status)
                 .build();
+    }
+
+    public ProductDto getDto() {
+        ProductDto productDto = new ProductDto();
+
+        productDto.setId(this.getId());
+        productDto.setTitle(this.getTitle());
+        productDto.setCost(this.getCost());
+        productDto.setDate(this.getDate());
+        productDto.setStatus(this.getStatus());
+        return productDto;
     }
 }

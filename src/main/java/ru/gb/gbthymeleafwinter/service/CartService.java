@@ -4,33 +4,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.gb.gbthymeleafwinter.dao.CartDao;
+import ru.gb.gbthymeleafwinter.dto.CartDto;
 import ru.gb.gbthymeleafwinter.entity.Cart;
+import ru.gb.gbthymeleafwinter.exception.NotFoundException;
 
-import java.util.Optional;
+import java.util.List;
 
 @Slf4j
 @Service
 public class CartService extends AbstractService<Cart> {
 
-    private final CartDao cartDao;
+    private final CartDao dao;
 
     @Autowired
     public CartService(CartDao cartDao) {
         super(cartDao);
-        this.cartDao = cartDao;
-    }
-
-    public Cart save(Cart cart) {
-        if (cart.getId() != null) {
-            Optional<Cart> CartFromDbOptional = cartDao.findById(cart.getId());
-            if (CartFromDbOptional.isPresent()) {
-                Cart cartFromDb = CartFromDbOptional.get();
-                cartFromDb.setStatus(cart.getStatus());
-                cartFromDb.setProducts(cart.getProducts());
-                return cartDao.save(cartFromDb);
-            }
-        }
-        return cartDao.save(cart);
+        this.dao = cartDao;
     }
 
     @Override
@@ -38,5 +27,22 @@ public class CartService extends AbstractService<Cart> {
         entityFromDb.setStatus(entity.getStatus());
         entityFromDb.setProducts(entity.getProducts());
         return entityFromDb;
+    }
+
+    public Cart save(CartDto entity) {
+        if (entity.getId() != null) {
+            Cart entityFromDb = findById(entity.getId());
+            entityFromDb.setStatus(entity.getStatus());
+            entityFromDb.setStatus(entity.getStatus());
+        }
+        return dao.save(entity.convertToCart());
+    }
+
+    public Cart findActive() {
+        List<Cart> allActive = (List<Cart>) findAllActive();
+        if (allActive.size() != 0) {
+            return allActive.get(0);
+        } else throw new NotFoundException();
+
     }
 }
