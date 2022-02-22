@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import ru.gb.gbthymeleafwinter.dto.CartDto;
 import ru.gb.gbthymeleafwinter.entity.enums.Status;
 
 import javax.persistence.*;
@@ -67,5 +68,9 @@ public class Cart extends AbstractEntity<Cart> {
 //                .products(products)
                 .status(status)
                 .build();
+    }
+
+    public CartDto getDto() {
+        return new CartDto(this);
     }
 }
